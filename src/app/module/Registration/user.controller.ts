@@ -1,18 +1,43 @@
-import { Schema, model } from "mongoose"; // Added import for `model`
-//import { TUser } from "./user.interface";
-import { IUser } from "./user.interface";
-import bcrypt from "bcrypt";
-const userSchema = new Schema<IUser>(
-  {
-    name: { type: String, required: true },
-    userId: { type: String, required: true, unique: true },
-    balance:{ type: Number, required: true, },
-   
+import { StatusCodes } from "http-status-codes";
+import { UserRegModel } from "./user.model";
+import sendResponse from "../../utils/response";
+import { Request, Response, NextFunction } from "express";
+const createUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // Taking name from body
+      const { name, userId } = req.body;
+  
+      // prepare data for post in database with initial balace=0
+      const newUserData = {
+        userId,
+        name,
+        balance: 0, // Default balance is 0
+      };
+  
+      // Save the user to the database
+      //pass data to userservices for saving data 
+      const result = await UserServices.createUserIntoDB(newUserData);
+  
+      // Send a success response
+      sendResponse(res, {
+        statusCode: StatusCodes.CREATED, 
+        success: true,
+        message: "User created successfully",
+        data: result,
+      });
+    } catch (error) {
+      // Handling error
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        success: false,
+        message: "Failed to create user",
+        error: (error as Error).message || "Something went wrong",
+  
+      });
+    }
+  };
 
-},
-  {
-    timestamps: true,
-  }
-);
 
-export const UserRegModel = model<IUser>("TestUser", userSchema);
+  export const userControllers = {
+    createUser
+};
+  
