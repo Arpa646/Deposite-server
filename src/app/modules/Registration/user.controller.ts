@@ -39,7 +39,41 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   };
 
 
+  const getAllUser = async (req: Request, res: Response) => {
+    try {
+      const result = await UserServices.getAllUserFromDB();
+      if (result.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "No Data Found",
+          data: [],
+        });
+      }
+  
+      sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Users retrieved successfully",
+        data: result,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while retrieving users",
+        error: error.message,
+      });
+    }
+  };
+  
+
+
+
+
+
+
+
   export const userControllers = {
-    createUser
+    createUser,
+    getAllUser
 };
   
