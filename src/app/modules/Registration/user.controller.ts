@@ -66,6 +66,40 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   };
   
 
+  const addBalance = async (req: Request, res: Response) => {
+    try {
+      // Extract `id` (userId) and `deposit` from the request body
+      const { userId, deposit } = req.body;
+  
+      // Check if the user exists
+      const user = await UserRegModel.findOne({ userId: userId });
+      if (!user) {
+        return res.status(StatusCodes.NOT_FOUND).send({
+          success: false,
+          message: `User with ID ${userId} not found`,
+        });
+      }
+  
+      // Update the user's balance by adding the deposit
+      user.balance += deposit;
+      const updatedUser = await user.save();
+  
+      // Send a success response with the updated user data
+      res.status(StatusCodes.OK).send({
+        success: true,
+        message: "Balance updated successfully",
+        data: updatedUser,
+      });
+    } catch (error) {
+      // Handle errors explicitly
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        success: false,
+        message: "Failed to update balance",
+        error: (error as Error).message || "Something went wrong",
+  
+      });
+    }
+  };
 
 
 

@@ -9,5 +9,8 @@ router.post(
 
   userControllers.createUser
 );
+router.get("/", userControllers.getAllUser);
+
+router.put("/add-balance", userControllers.addBalance);
 
 export const UserRoutes = router;
