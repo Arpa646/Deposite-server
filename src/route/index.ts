@@ -1,7 +1,10 @@
 import express from 'express';
 
 
-import { UserRoutes } from '../modules/Registration/user.route';
+// import { UserRoutes } from '../modules/Registration/user.route';
+
+
+import { UserRoutes } from '../app/modules/Registration/user.route';
 
 
 

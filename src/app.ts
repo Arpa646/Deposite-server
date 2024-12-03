@@ -2,7 +2,8 @@ import cors from "cors";
 import express, { Application, Request, Response } from "express";
 import bodyParser from 'body-parser';
 
-
+import router from "./route/index";
+import notFound from "./app/middleware/notFound";
 
 
 const app: Application = express();
@@ -30,7 +31,12 @@ app.get('/', (req, res) => {
 
 
 
+// Application routes
+app.use("/api", router);
 
+
+
+app.use(notFound);
 
 
 

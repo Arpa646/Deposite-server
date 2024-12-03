@@ -1,12 +1,14 @@
 import { StatusCodes } from "http-status-codes";
 import { UserRegModel } from "./user.model";
-import sendResponse from "../../utils/response";
+import sendResponse from "../../../utils/response";
 import { Request, Response, NextFunction } from "express";
+import { UserServices } from "./user.service";
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Taking name from body
       const { name, userId } = req.body;
   
+      console.log(name,userId)
       // prepare data for post in database with initial balace=0
       const newUserData = {
         userId,
